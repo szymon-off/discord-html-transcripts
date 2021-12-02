@@ -13,51 +13,15 @@ HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/Discor
 ## Usage
 ### Example usage using the built in message fetcher.
 ```java
-TODAVIA NADA PE ME FALTA CREO LOS METOHD XD
-const discordTranscripts = require('discord-html-transcripts');
+DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
 
-const channel = message.channel; // or however you get your TextChannel
-
-// Must be awaited
-const attachment = await discordTranscripts.createTranscript(channel);
-
-channel.send({
-    files: [attachment]
-});
+transcript.createTranscript(textChannel);
 ```
 
 ### Or if you prefer, you can pass in your own messages.
 ```java
-TODAVIA NADA PE ME FALTA CREO LOS METOHD XD
-const discordTranscripts = require('discord-html-transcripts');
+DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
 
-const messages = someWayToGetMessages(); // Must be Collection<string, Message> or Message[]
-const channel  = someWayToGetChannel();  // Used for ticket name, guild icon, and guild name
-
-// You do not need to await this
-const attachment = discordTranscripts.generateFromMessages(messages, channel);
-
-channel.send({
-    files: [attachment]
-});
+transcript.generateFromMessages(messages); // return to InputStream
 ```
 
-## Configuration
-Both methods of generating a transcript allow for an option object as the last parameter.
-
-### Built in Message Fetcher
-```java
-const attachment = await createTranscript(channel, {
-    limit: -1, // Max amount of messages to fetch.
-    returnBuffer: false, // Return a buffer instead of a MessageAttachment 
-    fileName: 'transcript.html' // Only valid with returnBuffer false. Name of attachment. 
-});
-```
-
-### Providing your own messages
-```java
-const attachment = await generateFromMessages(messages, channel, {
-    returnBuffer: false, // Return a buffer instead of a MessageAttachment 
-    fileName: 'transcript.html' // Only valid with returnBuffer false. Name of attachment. 
-});
-```
