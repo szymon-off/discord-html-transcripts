@@ -8,6 +8,23 @@ Discord HTML Transcripts is a node.js module (recode on JDA) to generate nice lo
 
 HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/DiscordChatExporter).
 
+## Installation
+
+```xml
+<repositories>
+ <repository>
+	<id>jitpack.io</id>
+	<url>https://jitpack.io</url>
+ </repository>
+</repositories>
+
+<dependency>
+  <groupId>com.github.Ryzeon</groupId>
+	<artifactId>discord-html-transcripts</artifactId>
+	<version>Tag</version>
+</dependency>
+```
+
 ## Example Output
 ![output](https://img.derock.dev/5f5q0a.png)
 
