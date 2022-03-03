@@ -12,16 +12,18 @@ HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/Discor
 
 ```xml
 <repositories>
- <repository>
+    <repository>
 	<id>jitpack.io</id>
 	<url>https://jitpack.io</url>
- </repository>
+    </repository>
 </repositories>
+```
 
+```xml
 <dependency>
-  <groupId>com.github.Ryzeon</groupId>
-	<artifactId>discord-html-transcripts</artifactId>
-	<version>Tag</version>
+    <groupId>com.github.Ryzeon</groupId>
+    <artifactId>discord-html-transcripts</artifactId>
+    <version>Tag</version>
 </dependency>
 ```
 
