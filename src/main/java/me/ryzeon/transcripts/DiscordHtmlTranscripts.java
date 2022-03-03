@@ -1,5 +1,6 @@
 package me.ryzeon.transcripts;
 
+import lombok.var;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +26,12 @@ import java.util.stream.Collectors;
  * Github: github.ryzeon.me
  */
 public class DiscordHtmlTranscripts {
+
+    private final List<String>
+            imageFormats = Arrays.asList("png", "jpg", "jpeg", "gif"),
+            videoFormats = Arrays.asList("mp4", "webm", "mkv", "avi", "mov", "flv", "wmv", "mpg", "mpeg"),
+            audioFormats = Arrays.asList("mp3", "wav", "ogg", "flac");
+
 
     private static final DiscordHtmlTranscripts instance = new DiscordHtmlTranscripts();
 
@@ -49,6 +57,8 @@ public class DiscordHtmlTranscripts {
         document.outputSettings().indentAmount(0).prettyPrint(true);
         document.getElementsByClass("preamble__guild-icon")
                 .first().attr("src", channel.getGuild().getIconUrl()); // set guild icon
+
+        document.getElementById("transcriptTitle").text(channel.getName()); // set title
         document.getElementById("guildname").text(channel.getGuild().getName()); // set guild name
         document.getElementById("ticketname").text(channel.getName()); // set channel name
 
@@ -75,7 +85,7 @@ public class DiscordHtmlTranscripts {
                 var author = referenceMessage.getAuthor();
                 var color = Formatter.toHex(message.getGuild().getMember(author).getColor());
 
-                System.out.println("REFERENCE MSG " + referenceMessage.getContentDisplay());
+        //        System.out.println("REFERENCE MSG " + referenceMessage.getContentDisplay());
                 reference.html("<img class=\"chatlog__reference-avatar\" src=\""
                         + author.getAvatarUrl() + "\" alt=\"Avatar\" loading=\"lazy\">" +
                         "<span class=\"chatlog__reference-name\" title=\"" + author.getName()
@@ -154,6 +164,13 @@ public class DiscordHtmlTranscripts {
 
                 Element messageContentContentMarkdownSpan = document.createElement("span");
                 messageContentContentMarkdownSpan.addClass("preserve-whitespace");
+//                System.out.println(message.getContentDisplay());
+//                System.out.println(message.getContentDisplay().length());
+//                System.out.println(message.getContentStripped());
+//                System.out.println(message.getContentRaw());
+//                System.out.println(message.getContentDisplay().contains("\n"));
+//                System.out.println(message.getContentDisplay().contains("\r"));
+//                System.out.println(message.getContentDisplay().contains("\r\n"));
                 messageContentContentMarkdownSpan
                         .html(Formatter.format(message.getContentDisplay()));
 
@@ -169,8 +186,8 @@ public class DiscordHtmlTranscripts {
                     attachmentsDiv.addClass("chatlog__attachment");
 
                     var attachmentType = attach.getFileExtension();
-                    if (Arrays.asList("png", "jpg", "jpeg", "gif").contains(attachmentType)) {
-                        System.out.println("UNGA IMAGEN WEBON XD");
+                    if (imageFormats.contains(attachmentType)) {
+              //          System.out.println("UNGA IMAGEN WEBON XD");
                         Element attachmentLink = document.createElement("a");
 
                         Element attachmentImage = document.createElement("img");
@@ -183,9 +200,7 @@ public class DiscordHtmlTranscripts {
 
                         attachmentLink.appendChild(attachmentImage);
                         attachmentsDiv.appendChild(attachmentLink);
-                    } else if (Arrays
-                            .asList("mp4", "webm", "mkv", "avi", "mov", "flv", "wmv", "mpg", "mpeg")
-                            .contains(attachmentType)) {
+                    } else if (videoFormats.contains(attachmentType)) {
                         Element attachmentVideo = document.createElement("video");
                         attachmentVideo.addClass("chatlog__attachment-media");
                         attachmentVideo.attr("src", attach.getUrl());
@@ -195,8 +210,7 @@ public class DiscordHtmlTranscripts {
                                 "Video: " + attach.getFileName() + Formatter.formatBytes(attach.getSize()));
 
                         attachmentsDiv.appendChild(attachmentVideo);
-                    } else if (Arrays.asList("mp3", "wav", "ogg", "flac")
-                            .contains(attachmentType)) {
+                    } else if (audioFormats.contains(attachmentType)) {
                         Element attachmentAudio = document.createElement("audio");
                         attachmentAudio.addClass("chatlog__attachment-media");
                         attachmentAudio.attr("src", attach.getUrl());
@@ -316,14 +330,14 @@ public class DiscordHtmlTranscripts {
 
                             Element embedTitleMarkdown = document.createElement("div");
                             embedTitleMarkdown.addClass("markdown preserve-whitespace")
-                                    .text(embed.getTitle());
+                                    .html(Formatter.format(embed.getTitle()));
 
                             embedTitleLink.appendChild(embedTitleMarkdown);
                             embedTitle.appendChild(embedTitleLink);
                         } else {
                             Element embedTitleMarkdown = document.createElement("div");
                             embedTitleMarkdown.addClass("markdown preserve-whitespace")
-                                    .text(embed.getTitle());
+                                    .html(Formatter.format(embed.getTitle()));
 
                             embedTitle.appendChild(embedTitleMarkdown);
                         }
@@ -338,7 +352,7 @@ public class DiscordHtmlTranscripts {
                         Element embedDescriptionMarkdown = document.createElement("div");
                         embedDescriptionMarkdown.addClass("markdown preserve-whitespace");
                         embedDescriptionMarkdown
-                                .text(Formatter.format(embed.getDescription()));
+                                .html(Formatter.format(embed.getDescription()));
 
                         embedDescription.appendChild(embedDescriptionMarkdown);
                         embedText.appendChild(embedDescription);
