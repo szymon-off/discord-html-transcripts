@@ -1,20 +1,16 @@
 package me.ryzeon.transcripts;
 
 import lombok.var;
-import net.dv8tion.jda.api.entities.ISnowflake;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.awt.*;
 import java.io.*;
 import java.net.URL;;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,7 +67,7 @@ public class DiscordHtmlTranscripts {
             messageGroup.addClass("chatlog__message-group");
 
             // message reference
-            if (message.getMessageReference() != null) { // preguntar si es eso
+            if (message.getReferencedMessage() != null) { // preguntar si es eso
                 // message.reference?.messageId
                 // create symbol
                 Element referenceSymbol = document.createElement("div");
@@ -82,10 +78,11 @@ public class DiscordHtmlTranscripts {
                 reference.addClass("chatlog__reference");
 
                 var referenceMessage = message.getReferencedMessage();
-                var author = referenceMessage.getAuthor();
-                var color = Formatter.toHex(message.getGuild().getMember(author).getColor());
+                User author = referenceMessage.getAuthor();
+                Member member = channel.getGuild().getMember(author);
+                var color = Formatter.toHex(Objects.requireNonNull(member.getColor()));
 
-        //        System.out.println("REFERENCE MSG " + referenceMessage.getContentDisplay());
+                //        System.out.println("REFERENCE MSG " + referenceMessage.getContentDisplay());
                 reference.html("<img class=\"chatlog__reference-avatar\" src=\""
                         + author.getAvatarUrl() + "\" alt=\"Avatar\" loading=\"lazy\">" +
                         "<span class=\"chatlog__reference-name\" title=\"" + author.getName()
@@ -187,7 +184,7 @@ public class DiscordHtmlTranscripts {
 
                     var attachmentType = attach.getFileExtension();
                     if (imageFormats.contains(attachmentType)) {
-              //          System.out.println("UNGA IMAGEN WEBON XD");
+                        //          System.out.println("UNGA IMAGEN WEBON XD");
                         Element attachmentLink = document.createElement("a");
 
                         Element attachmentImage = document.createElement("img");
