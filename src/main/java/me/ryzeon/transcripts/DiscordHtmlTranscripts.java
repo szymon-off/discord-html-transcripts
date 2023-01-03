@@ -2,24 +2,27 @@ package me.ryzeon.transcripts;
 
 import lombok.var;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.awt.*;
-import java.io.*;
-import java.net.URL;;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
- * Created by Ryzeon
+ * Created by Ryzeon, forked by Inkception
  * Project: discord-html-transcripts
- * Date: 2/12/21 @ 00:32
- * Twitter: @Ryzeon_ 😎
- * Github: github.ryzeon.me
+ * Date: 1/3/2023 @ 10:50
  */
 public class DiscordHtmlTranscripts {
 
@@ -40,7 +43,9 @@ public class DiscordHtmlTranscripts {
     }
 
     public void createTranscript(TextChannel channel, String fileName) throws IOException {
-        channel.sendFile(generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())), fileName != null ? fileName : "transcript.html").queue();
+        channel.sendFiles(FileUpload.fromData(
+                generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())),
+                fileName != null ? fileName : "transcript.html")).queue();
     }
 
     public InputStream generateFromMessages(Collection<Message> messages) throws IOException {
@@ -48,7 +53,9 @@ public class DiscordHtmlTranscripts {
         if (messages.isEmpty()) {
             throw new IllegalArgumentException("No messages to generate a transcript from");
         }
-        TextChannel channel = messages.iterator().next().getTextChannel();
+
+        GuildChannel channel = messages.iterator().next().getChannel().asGuildMessageChannel();
+
         Document document = Jsoup.parse(htmlTemplate, "UTF-8");
         document.outputSettings().indentAmount(0).prettyPrint(true);
         document.getElementsByClass("preamble__guild-icon")
@@ -161,13 +168,6 @@ public class DiscordHtmlTranscripts {
 
                 Element messageContentContentMarkdownSpan = document.createElement("span");
                 messageContentContentMarkdownSpan.addClass("preserve-whitespace");
-//                System.out.println(message.getContentDisplay());
-//                System.out.println(message.getContentDisplay().length());
-//                System.out.println(message.getContentStripped());
-//                System.out.println(message.getContentRaw());
-//                System.out.println(message.getContentDisplay().contains("\n"));
-//                System.out.println(message.getContentDisplay().contains("\r"));
-//                System.out.println(message.getContentDisplay().contains("\r\n"));
                 messageContentContentMarkdownSpan
                         .html(Formatter.format(message.getContentDisplay()));
 
@@ -184,7 +184,6 @@ public class DiscordHtmlTranscripts {
 
                     var attachmentType = attach.getFileExtension();
                     if (imageFormats.contains(attachmentType)) {
-                        //          System.out.println("UNGA IMAGEN WEBON XD");
                         Element attachmentLink = document.createElement("a");
 
                         Element attachmentImage = document.createElement("img");
