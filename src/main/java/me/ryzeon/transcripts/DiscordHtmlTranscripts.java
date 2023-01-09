@@ -2,8 +2,8 @@ package me.ryzeon.transcripts;
 
 import lombok.var;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,11 +36,11 @@ public class DiscordHtmlTranscripts {
         return instance;
     }
 
-    public void createTranscript(TextChannel channel) throws IOException {
+    public void createTranscript(GuildMessageChannel channel) throws IOException {
         createTranscript(channel, null);
     }
 
-    public void createTranscript(TextChannel channel, String fileName) throws IOException {
+    public void createTranscript(GuildMessageChannel channel, String fileName) throws IOException {
         channel.sendFiles(FileUpload.fromData(
                 generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())),
                 fileName != null ? fileName : "transcript.html")).queue();
