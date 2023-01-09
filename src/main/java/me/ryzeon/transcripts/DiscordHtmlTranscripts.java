@@ -59,9 +59,9 @@ public class DiscordHtmlTranscripts {
         document.getElementsByClass("preamble__guild-icon")
                 .first().attr("src", channel.getGuild().getIconUrl()); // set guild icon
 
-        document.getElementById("transcriptTitle").text(channel.getName()); // set title
+        document.getElementById("transcriptTitle").text("#" + channel.getName() + " | " + messages.size() + " messages"); // set title
         document.getElementById("guildname").text(channel.getGuild().getName()); // set guild name
-        document.getElementById("ticketname").text(channel.getName()); // set channel name
+        document.getElementById("ticketname").text("#" + channel.getName()); // set channel name
 
         Element chatLog = document.getElementById("chatlog"); // chat log
         for (Message message : messages.stream()
