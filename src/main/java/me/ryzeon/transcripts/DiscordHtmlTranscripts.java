@@ -10,10 +10,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,14 +47,14 @@ public class DiscordHtmlTranscripts {
     }
 
     public InputStream generateFromMessages(Collection<Message> messages) throws IOException {
-        File htmlTemplate = findFile("template.html");
+        InputStream htmlTemplate = findFile("template.html");
         if (messages.isEmpty()) {
             throw new IllegalArgumentException("No messages to generate a transcript from");
         }
 
         GuildChannel channel = messages.iterator().next().getChannel().asGuildMessageChannel();
 
-        Document document = Jsoup.parse(htmlTemplate, "UTF-8");
+        Document document = Jsoup.parse(htmlTemplate, "UTF-8", "template.html");
         document.outputSettings().indentAmount(0).prettyPrint(true);
         document.getElementsByClass("preamble__guild-icon")
                 .first().attr("src", channel.getGuild().getIconUrl()); // set guild icon
@@ -478,11 +476,11 @@ public class DiscordHtmlTranscripts {
         return new ByteArrayInputStream(document.outerHtml().getBytes());
     }
 
-    private File findFile(String fileName) {
-        URL url = getClass().getClassLoader().getResource(fileName);
-        if (url == null) {
+    private InputStream findFile(String fileName) {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (inputStream == null) {
             throw new IllegalArgumentException("file is not found: " + fileName);
         }
-        return new File(url.getFile());
+        return inputStream;
     }
 }
