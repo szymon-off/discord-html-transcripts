@@ -1,9 +1,10 @@
 package me.ryzeon.transcripts;
 
+import lombok.experimental.UtilityClass;
+
 import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.experimental.UtilityClass;
 
 /**
  * Created by Ryzeon
@@ -34,7 +35,6 @@ public class Formatter {
     }
 
     public String format(String originalText) {
-        System.out.println(originalText);
         Matcher matcher = STRONG.matcher(originalText);
         String newText = originalText;
         while (matcher.find()) {
