@@ -71,11 +71,10 @@ public class Formatter {
         matcher = LINK.matcher(newText);
         while(matcher.find()) {
             String group = matcher.group(1);
-            String link = matcher.group(2).replace("(", "").replace(")", "");
-            String raw = group + link;
+            String link = matcher.group(2);
+            String raw = "[" + group + "]" + link;
 
-            newText = newText.replace(raw,
-                    "<a href=" + link + ">" + group + "</a>");
+            newText = newText.replace(raw, "<a href=\"" + link.replace("(", "").replace(")", "") + "\">" + group + "</a>");
         }
 
         matcher = CODE.matcher(newText);
