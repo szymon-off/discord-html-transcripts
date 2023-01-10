@@ -65,7 +65,7 @@ public class Formatter {
         while(matcher.find()) {
             String group = matcher.group();
             newText = newText.replace(group,
-                    "<span class=\"quote\">" + group.replace(">>>", "").replace(">", "") + "<span>");
+                    "<span class=\"quote\">" + group.replace(">>>", "").replace(">", "") + "</span>");
         }
 
         matcher = CODE.matcher(newText);
