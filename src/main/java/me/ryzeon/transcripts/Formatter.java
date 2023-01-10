@@ -70,10 +70,10 @@ public class Formatter {
         }
         matcher = LINK.matcher(newText);
         while(matcher.find()) {
-            String group = matcher.group();
-            String link = matcher.group(1);
+            String group = matcher.group(1);
+            String link = matcher.group(2).replace("(", "").replace(")", "");
             newText = newText.replace(group,
-                    "<a href=" + link.replace("(", "").replace(")", "") + ">" + group + "</a>");
+                    "<a href=" + link + ">" + group + "</a>");
         }
 
         matcher = CODE.matcher(newText);
