@@ -22,7 +22,7 @@ public class Formatter {
     private final Pattern U = Pattern.compile("__(.+?)__");
     private final Pattern CODE = Pattern.compile("```(.+?)```");
     private final Pattern CODE_1 = Pattern.compile("`(.+?)`");
-    private final Pattern QUOTE = Pattern.compile("> (\\S)|>>> (\\S)");
+    private final Pattern QUOTE = Pattern.compile("^(>){1,3}");
     // conver this /(?:\r\n|\r|\n)/g to patter in java
     private final Pattern NEW_LINE = Pattern.compile("\\n");
 
