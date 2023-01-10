@@ -22,6 +22,7 @@ public class Formatter {
     private final Pattern U = Pattern.compile("__(.+?)__");
     private final Pattern CODE = Pattern.compile("```(.+?)```");
     private final Pattern CODE_1 = Pattern.compile("`(.+?)`");
+    private final Pattern QUOTE = Pattern.compile(">>> (.+?)|> (.+?)");
     // conver this /(?:\r\n|\r|\n)/g to patter in java
     private final Pattern NEW_LINE = Pattern.compile("\\n");
 
@@ -60,6 +61,13 @@ public class Formatter {
             newText = newText.replace(group,
                     "<u>" + group.replace("__", "") + "</u>");
         }
+        matcher = QUOTE.matcher(newText);
+        while(matcher.find()) {
+            String group = matcher.group();
+            newText = newText.replace(group,
+                    "<span class=\"quote\">" + group.replace(">>>", "").replace(">", "") + "<span>");
+        }
+
         matcher = CODE.matcher(newText);
         boolean findCode = false;
         while (matcher.find()) {
