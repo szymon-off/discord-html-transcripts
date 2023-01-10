@@ -72,7 +72,10 @@ public class Formatter {
         while(matcher.find()) {
             String group = matcher.group(1);
             String link = matcher.group(2).replace("(", "").replace(")", "");
-            newText = newText.replace(group, "").replace(link, "") + "<a href=" + link + ">" + group + "</a>";
+            String raw = group + link;
+
+            newText = newText.replace(raw,
+                    "<a href=" + link + ">" + group + "</a>");
         }
 
         matcher = CODE.matcher(newText);
