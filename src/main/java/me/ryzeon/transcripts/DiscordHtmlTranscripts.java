@@ -261,14 +261,16 @@ public class DiscordHtmlTranscripts {
                     embedDiv.addClass("chatlog__embed");
 
                     // embed color
-                    if (embed.getColor() != null) {
-                        Element embedColorPill = document.createElement("div");
+                    Element embedColorPill = document.createElement("div");
+
+                    if (embed.getColor() == null) {
+                        embedColorPill.addClass("chatlog__embed-color-pill--default");
+                    } else {
                         embedColorPill.addClass("chatlog__embed-color-pill");
                         embedColorPill.attr("style",
                                 "background-color: #" + Formatter.toHex(embed.getColor()));
-
-                        embedDiv.appendChild(embedColorPill);
                     }
+                    embedDiv.appendChild(embedColorPill);
 
                     Element embedContentContainer = document.createElement("div");
                     embedContentContainer.addClass("chatlog__embed-content-container");
