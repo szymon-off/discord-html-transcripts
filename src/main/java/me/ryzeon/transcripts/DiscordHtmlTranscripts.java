@@ -264,7 +264,7 @@ public class DiscordHtmlTranscripts {
                     Element embedColorPill = document.createElement("div");
 
                     if (embed.getColor() == null) {
-                        embedColorPill.addClass("chatlog__embed-color-pill--default");
+                        embedColorPill.addClass("chatlog__embed-color-pill chatlog__embed-color-pill--default");
                     } else {
                         embedColorPill.addClass("chatlog__embed-color-pill");
                         embedColorPill.attr("style",
