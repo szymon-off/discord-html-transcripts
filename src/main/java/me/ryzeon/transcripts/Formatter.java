@@ -23,7 +23,7 @@ public class Formatter {
     private final Pattern CODE = Pattern.compile("```(.+?)```");
     private final Pattern CODE_1 = Pattern.compile("`(.+?)`");
     private final Pattern QUOTE = Pattern.compile(">{1,3} (.*)");
-    private final Pattern LINK = Pattern.compile("\\[([^\\[]+)\\](\\(.*\\))");
+    private final Pattern LINK = Pattern.compile("\\[([^\\[]+)\\](\\((www|http:|https:)+[^\\s]+[\\w]\\))");
     // conver this /(?:\r\n|\r|\n)/g to patter in java
     private final Pattern NEW_LINE = Pattern.compile("\\n");
 
