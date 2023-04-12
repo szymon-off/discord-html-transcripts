@@ -36,12 +36,12 @@ public class DiscordHtmlTranscripts {
         return instance;
     }
 
-    public void createTranscript(GuildMessageChannel channel) throws IOException {
-        createTranscript(channel, null);
+    public void createTranscript(GuildMessageChannel channel, GuildMessageChannel sendTo) throws IOException {
+        createTranscript(channel, sendTo, null);
     }
 
-    public void createTranscript(GuildMessageChannel channel, String fileName) throws IOException {
-        channel.sendFiles(FileUpload.fromData(
+    public void createTranscript(GuildMessageChannel channel, GuildMessageChannel sendTo, String fileName) throws IOException {
+        sendTo.sendFiles(FileUpload.fromData(
                 generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())),
                 fileName != null ? fileName : "transcript.html")).queue();
     }
