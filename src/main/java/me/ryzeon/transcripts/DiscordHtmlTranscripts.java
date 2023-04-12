@@ -86,7 +86,7 @@ public class DiscordHtmlTranscripts {
                 Member member = channel.getGuild().getMember(author);
                 var color = Formatter.toHex(Objects.requireNonNull(member.getColor()));
 
-                //        System.out.println("REFERENCE MSG " + referenceMessage.getContentRaw());
+                //        System.out.println("REFERENCE MSG " + referenceMessage.getContentDisplay());
                 reference.html("<img class=\"chatlog__reference-avatar\" src=\""
                         + author.getAvatarUrl() + "\" alt=\"Avatar\" loading=\"lazy\">" +
                         "<span class=\"chatlog__reference-name\" title=\"" + author.getName()
@@ -95,11 +95,11 @@ public class DiscordHtmlTranscripts {
                         " <span class=\"chatlog__reference-link\" onclick=\"scrollToMessage(event, '"
                         + referenceMessage.getId() + "')\">" +
                         "<em>" +
-                        referenceMessage.getContentRaw() != null
-                        ? referenceMessage.getContentRaw().length() > 42
-                        ? referenceMessage.getContentRaw().substring(0, 42)
+                        referenceMessage.getContentDisplay() != null
+                        ? referenceMessage.getContentDisplay().length() > 42
+                        ? referenceMessage.getContentDisplay().substring(0, 42)
                         + "..."
-                        : referenceMessage.getContentRaw()
+                        : referenceMessage.getContentDisplay()
                         : "Click to see attachment" +
                         "</em>" +
                         "</span>" +
@@ -156,7 +156,7 @@ public class DiscordHtmlTranscripts {
             messageContent.attr("title", "Message sent: "
                     + message.getTimeCreated().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
-            if (message.getContentRaw().length() > 0) {
+            if (message.getContentDisplay().length() > 0) {
                 Element messageContentContent = document.createElement("div");
                 messageContentContent.addClass("chatlog__content");
 
@@ -166,7 +166,7 @@ public class DiscordHtmlTranscripts {
                 Element messageContentContentMarkdownSpan = document.createElement("span");
                 messageContentContentMarkdownSpan.addClass("preserve-whitespace");
                 messageContentContentMarkdownSpan
-                        .html(Formatter.format(message.getContentRaw()));
+                        .html(Formatter.format(message.getContentDisplay()));
 
                 messageContentContentMarkdown.appendChild(messageContentContentMarkdownSpan);
                 messageContentContent.appendChild(messageContentContentMarkdown);
