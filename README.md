@@ -1,7 +1,7 @@
 # Discord (JDA) HTML Transcripts
-[![](https://jitpack.io/v/Ryzeon/discord-html-transcripts.svg)](https://jitpack.io/#Inkception/discord-html-transcripts)
+[![](https://jitpack.io/v/Inkception/discord-html-transcripts.svg)](https://jitpack.io/#Inkception/discord-html-transcripts)
 
-Discord HTML Transcripts is a node.js module (recode on JDA) to generate nice looking HTML transcripts. Processes discord markdown like **bold**, *italics*, ~~strikethroughs~~, and more. Nicely formats attachments and embeds. Built in XSS protection, preventing users from inserting html tags. 
+Discord HTML Transcripts is a node.js module (recode on JDA) to generate nice looking HTML transcripts. Processes discord markdown like **bold**, *italics*, ~~strikethroughs~~, and more. Nicely formats attachments and embeds. Built in XSS protection, preventing users from inserting html tags.
 
 **This module is designed to work with [JDA 5](https://github.com/DV8FromTheWorld/JDA).**
 
@@ -33,14 +33,15 @@ HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/Discor
 ### Example usage using the built in message fetcher.
 ```java
 DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
-
-transcript.createTranscript(textChannel);
+textChannel.sendFiles(transcript.createTranscript(textChannel)).queue()
 ```
 
 ### Or if you prefer, you can pass in your own messages.
 ```java
 DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
-
 transcript.generateFromMessages(messages); // return to InputStream
 ```
+
+
+
 
