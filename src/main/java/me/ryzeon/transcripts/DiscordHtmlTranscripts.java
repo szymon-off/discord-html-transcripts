@@ -1,5 +1,6 @@
 package me.ryzeon.transcripts;
 
+import kotlin.text.Charsets;
 import lombok.var;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -473,7 +474,7 @@ public class DiscordHtmlTranscripts {
             messageGroup.appendChild(content);
             chatLog.appendChild(messageGroup);
         }
-        return new ByteArrayInputStream(document.outerHtml().getBytes());
+        return new ByteArrayInputStream(document.outerHtml().getBytes(Charsets.UTF_8));
     }
 
     private InputStream findFile(String fileName) {
