@@ -22,7 +22,7 @@ public class Formatter {
     private final Pattern U = Pattern.compile("__(.+?)__");
     private final Pattern CODE = Pattern.compile("```(.+?)```");
     private final Pattern CODE_1 = Pattern.compile("`(.+?)`");
-    private final Pattern QUOTE = Pattern.compile(">{1,3} (.*)");
+    private final Pattern QUOTE = Pattern.compile("^>{1,3} (.*)$");
     private final Pattern LINK = Pattern.compile("\\[([^\\[]+)\\](\\((www|http:|https:)+[^\\s]+[\\w]\\))");
     // conver this /(?:\r\n|\r|\n)/g to patter in java
     private final Pattern NEW_LINE = Pattern.compile("\\n");
@@ -66,7 +66,7 @@ public class Formatter {
         while(matcher.find()) {
             String group = matcher.group();
             newText = newText.replace(group,
-                    "<span class=\"quote\">" + group.replace(">>>", "").replace(">", "") + "</span>");
+                    "<span class=\"quote\">" + group.replaceFirst(">>>", "").replaceFirst(">", "") + "</span>");
         }
         matcher = LINK.matcher(newText);
         while(matcher.find()) {
