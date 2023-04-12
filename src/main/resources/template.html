@@ -65,12 +65,7 @@
 
         .markdown {
             max-width: 100%;
-            line-height: 1.1;
-            overflow-wrap: break-word;
-        }
-
-        .preserve-whitespace {
-            white-space: pre-wrap;
+            line-height: 1.2;
         }
 
         .spoiler-text {
@@ -414,6 +409,7 @@
             display: flex;
             margin-top: 0.3em;
             max-width: 520px;
+			margin-bottom: 0.9rem;
         }
 
         .chatlog__embed-color-pill {
@@ -471,15 +467,16 @@
         }
 
         .chatlog__embed-title {
-            margin-bottom: 0.2em;
-            font-size: 0.875em;
+			padding-top: 0.4em;
+            font-size: 0.980em;
             font-weight: 600;
             color: #ffffff;
         }
 
         .chatlog__embed-description {
-            font-weight: 500;
+            font-weight: 400;
             font-size: 0.85em;
+			padding-top: 0.6em;
             color: #dcddde;
         }
 
@@ -515,8 +512,8 @@
         }
 
         .chatlog__embed-thumbnail {
-            flex: 0;
             margin-left: 1.2em;
+			margin-top: 0.3em;
             max-width: 80px;
             max-height: 80px;
             border-radius: 3px;
@@ -613,15 +610,28 @@
         .postamble__entry {
             color: #ffffff;
         }
+
+        .img.emoji {
+            pointer-events: none;
+        }
     </style>
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/solarized-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.pre--multiline').forEach(block => hljs.highlightBlock(block));
         });
+    </script>
+
+
+    <!-- Script to render emojis as Twemojis -->
+    <script>
+        window.onload = function() {
+            twemoji.parse(document.body);
+        }
     </script>
 
     <script>
