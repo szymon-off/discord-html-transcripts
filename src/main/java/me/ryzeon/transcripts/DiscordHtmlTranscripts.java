@@ -1,7 +1,6 @@
 package me.ryzeon.transcripts;
 
 import kotlin.text.Charsets;
-import lombok.var;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -25,17 +24,19 @@ import java.util.stream.Collectors;
  */
 public class DiscordHtmlTranscripts {
 
+    private static DiscordHtmlTranscripts instance;
     private final List<String>
             imageFormats = Arrays.asList("png", "jpg", "jpeg", "gif"),
             videoFormats = Arrays.asList("mp4", "webm", "mkv", "avi", "mov", "flv", "wmv", "mpg", "mpeg"),
             audioFormats = Arrays.asList("mp3", "wav", "ogg", "flac");
 
-
-    private static final DiscordHtmlTranscripts instance = new DiscordHtmlTranscripts();
-
     public static DiscordHtmlTranscripts getInstance() {
+        if (instance == null) {
+            instance = new DiscordHtmlTranscripts();
+        }
         return instance;
     }
+
 
     public FileUpload createTranscript(GuildMessageChannel channel) throws IOException {
         return createTranscript(channel, null);

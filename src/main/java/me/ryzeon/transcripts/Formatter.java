@@ -32,7 +32,7 @@ public class Formatter {
         if (bytes < unit)
             return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = "KMGTPE".charAt(exp - 1) + "";
+        String pre = String.valueOf("KMGTPE".charAt(exp - 1));
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
@@ -63,13 +63,13 @@ public class Formatter {
                     "<u>" + group.replace("__", "") + "</u>");
         }
         matcher = QUOTE.matcher(newText);
-        while(matcher.find()) {
+        while (matcher.find()) {
             String group = matcher.group();
             newText = newText.replace(group,
                     "<span class=\"quote\">" + group.replaceFirst(">>>", "").replaceFirst(">", "") + "</span>");
         }
         matcher = LINK.matcher(newText);
-        while(matcher.find()) {
+        while (matcher.find()) {
             String group = matcher.group(1);
             String link = matcher.group(2);
             String raw = "[" + group + "]" + link;
@@ -103,7 +103,7 @@ public class Formatter {
 
     public String toHex(Color color) {
         String hex = Integer.toHexString(color.getRGB() & 0xffffff);
-        while(hex.length() < 6){
+        while (hex.length() < 6) {
             hex = "0" + hex;
         }
         return hex;
