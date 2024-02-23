@@ -1,24 +1,24 @@
 package me.ryzeon.transcripts;
 
 import lombok.Getter;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -393,7 +393,7 @@ public class DiscordHtmlTranscripts {
                             embedField.addClass(field.isInline() ? "chatlog__embed-field-inline"
                                     : "chatlog__embed-field");
 
-                            // Field nmae
+                            // Field name
                             Element embedFieldName = document.createElement("div");
                             embedFieldName.addClass("chatlog__embed-field-name");
 
