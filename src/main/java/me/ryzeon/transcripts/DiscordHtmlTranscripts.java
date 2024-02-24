@@ -1,7 +1,10 @@
 package me.ryzeon.transcripts;
 
 import lombok.Getter;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.jsoup.Jsoup;
@@ -16,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -53,11 +55,11 @@ public class DiscordHtmlTranscripts {
      * @return Returns a usable FileUpload object to send to a channel
      */
     public FileUpload getTranscript(TextChannel channel, String fileName) throws IOException {
-        return FileUpload.fromData(generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())), fileName);
+        return FileUpload.fromData((generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList()))), fileName);
     }
 
     private void createTranscript(TextChannel channel, String fileName) throws IOException {
-        FileUpload transcript = FileUpload.fromData(generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList())), fileName != null ? fileName : "transcript.html");
+        FileUpload transcript = FileUpload.fromData((generateFromMessages(channel.getIterableHistory().stream().collect(Collectors.toList()))), fileName != null ? fileName : "transcript.html");
         channel.sendFiles(transcript).queue();;
     }
 
@@ -76,7 +78,7 @@ public class DiscordHtmlTranscripts {
         if (preambleGuildIcon != null && guildIconUrl != null) {
             preambleGuildIcon.attr("src", guildIconUrl);
         } else {
-            // Handle the case where either the element or the URL is null
+            preambleGuildIcon.attr("src", "https://guild-studio.com/wp-content/uploads/2021/05/s9biyhs4lix61.jpg");
         }
         Objects.requireNonNull(document.getElementById("transcriptTitle")).text(channel.getName()); // set title
         Objects.requireNonNull(document.getElementById("guildname")).text(channel.getGuild().getName()); // set guild name
@@ -86,6 +88,10 @@ public class DiscordHtmlTranscripts {
         for (Message message : messages.stream()
                 .sorted(Comparator.comparing(ISnowflake::getTimeCreated))
                 .toList()) {
+
+            if (message.getAuthor().isBot()) {
+                continue;
+            }
             // create message group
             Element messageGroup = document.createElement("div");
             messageGroup.addClass("chatlog__message-group");
@@ -111,9 +117,9 @@ public class DiscordHtmlTranscripts {
                 referenceMessage.getId();
                 referenceMessage.getContentDisplay();
                 reference.html(referenceMessage.getContentDisplay().length() > 42
-                ? referenceMessage.getContentDisplay().substring(0, 42)
-                + "..."
-                : referenceMessage.getContentDisplay());
+                        ? referenceMessage.getContentDisplay().substring(0, 42)
+                        + "..."
+                        : referenceMessage.getContentDisplay());
 
                 messageGroup.appendChild(referenceSymbol);
                 messageGroup.appendChild(reference);
@@ -126,9 +132,24 @@ public class DiscordHtmlTranscripts {
 
             Element authorAvatar = document.createElement("img");
             authorAvatar.addClass("chatlog__author-avatar");
-            authorAvatar.attr("src", Objects.requireNonNull(author.getAvatarUrl()));
             authorAvatar.attr("alt", "Avatar");
             authorAvatar.attr("loading", "lazy");
+
+            Element authorName = document.createElement("span");
+            authorName.addClass("chatlog__author-name");
+
+            if (author != null) {
+                authorName.attr("title", Objects.requireNonNull(author.getGlobalName()));
+                authorName.text(author.getName());
+                authorName.attr("data-user-id", author.getId());
+                authorAvatar.attr("src", Objects.requireNonNull(author.getAvatarUrl()));
+            } else {
+                // Handle the case when author is null (e.g., when the message is from a bot)
+                authorName.attr("title", "Bot");
+                authorName.text("Bot");
+                authorName.attr("data-user-id", "Bot");
+                authorAvatar.attr("src", "default_bot_avatar_url"); // replace with your default bot avatar URL
+            }
 
             authorElement.appendChild(authorAvatar);
             messageGroup.appendChild(authorElement);
@@ -136,15 +157,10 @@ public class DiscordHtmlTranscripts {
             // message content
             Element content = document.createElement("div");
             content.addClass("chatlog__messages");
-            // message author name
-            Element authorName = document.createElement("span");
-            authorName.addClass("chatlog__author-name");
-            authorName.attr("title", Objects.requireNonNull(author.getGlobalName()));
-            authorName.text(author.getName());
-            authorName.attr("data-user-id", author.getId());
+
             content.appendChild(authorName);
 
-            if (author.isBot()) {
+            if (author != null && author.isBot()) {
                 Element botTag = document.createElement("span");
                 botTag.addClass("chatlog__bot-tag").text("BOT");
                 content.appendChild(botTag);
@@ -371,7 +387,7 @@ public class DiscordHtmlTranscripts {
                             embedField.addClass(field.isInline() ? "chatlog__embed-field-inline"
                                     : "chatlog__embed-field");
 
-                            // Field nmae
+                            // Field name
                             Element embedFieldName = document.createElement("div");
                             embedFieldName.addClass("chatlog__embed-field-name");
 
