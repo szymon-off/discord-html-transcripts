@@ -1,6 +1,10 @@
 package me.ryzeon.transcripts;
 
 import kotlin.text.Charsets;
+import me.ryzeon.transcripts.utils.format.IFormatHelper;
+import me.ryzeon.transcripts.utils.format.impl.AudioFormat;
+import me.ryzeon.transcripts.utils.format.impl.ImageFormat;
+import me.ryzeon.transcripts.utils.format.impl.VideoFormat;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -26,13 +30,14 @@ import java.util.stream.Collectors;
 public class DiscordHtmlTranscripts {
 
     private static DiscordHtmlTranscripts instance;
-    private final List<String>
-            imageFormats = Arrays.asList("png", "jpg", "jpeg", "gif"),
-            videoFormats = Arrays.asList("mp4", "webm", "mkv", "avi", "mov", "flv", "wmv", "mpg", "mpeg"),
-            audioFormats = Arrays.asList("mp3", "wav", "ogg", "flac");
+    private final IFormatHelper
+            imageFormats = new ImageFormat(),
+            videoFormats = new VideoFormat(),
+            audioFormats = new AudioFormat();
 
     /**
      * Get the instance of the DiscordHtmlTranscripts
+     *
      * @return a singleton instance of the DiscordHtmlTranscripts
      */
     public static DiscordHtmlTranscripts getInstance() {
@@ -47,7 +52,7 @@ public class DiscordHtmlTranscripts {
         embedFooter.addClass("chatlog__embed-footer");
 
 
-        if (embed.getFooter().getIconUrl() != null) {
+        if (Objects.requireNonNull(embed.getFooter()).getIconUrl() != null) {
             Element embedFooterIcon = document.createElement("img");
             embedFooterIcon.addClass("chatlog__embed-footer-icon");
             embedFooterIcon.attr("src", embed.getFooter().getIconUrl());
@@ -336,7 +341,7 @@ public class DiscordHtmlTranscripts {
     }
 
     public InputStream generateFromMessages(Collection<Message> messages) throws IOException {
-        InputStream htmlTemplate = findFile("template.html");
+        InputStream htmlTemplate = findFile();
         if (messages.isEmpty()) {
             throw new IllegalArgumentException("No messages to generate a transcript from");
         }
@@ -446,11 +451,11 @@ public class DiscordHtmlTranscripts {
                     attachmentsDiv.addClass("chatlog__attachment");
 
                     var attachmentType = attach.getFileExtension();
-                    if (imageFormats.contains(attachmentType)) {
+                    if (imageFormats.isFormat(attachmentType)) {
                         handleImages(document, attach, attachmentsDiv);
-                    } else if (videoFormats.contains(attachmentType)) {
+                    } else if (videoFormats.isFormat(attachmentType)) {
                         handleVideos(document, attach, attachmentsDiv);
-                    } else if (audioFormats.contains(attachmentType)) {
+                    } else if (audioFormats.isFormat(attachmentType)) {
                         handleAudios(document, attach, attachmentsDiv);
                     } else {
                         handleUnknownAttachmentTypes(document, attach, attachmentsDiv);
@@ -542,10 +547,10 @@ public class DiscordHtmlTranscripts {
         return new ByteArrayInputStream(document.outerHtml().getBytes(Charsets.UTF_8));
     }
 
-    private InputStream findFile(String fileName) {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+    private InputStream findFile() {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("template.html");
         if (inputStream == null) {
-            throw new IllegalArgumentException("file is not found: " + fileName);
+            throw new IllegalArgumentException("file is not found: " + "template.html");
         }
         return inputStream;
     }
