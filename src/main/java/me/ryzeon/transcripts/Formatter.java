@@ -1,9 +1,10 @@
 package me.ryzeon.transcripts;
 
+import lombok.experimental.UtilityClass;
+
 import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.experimental.UtilityClass;
 
 /**
  * Created by Ryzeon
@@ -21,6 +22,8 @@ public class Formatter {
     private final Pattern U = Pattern.compile("__(.+?)__");
     private final Pattern CODE = Pattern.compile("```(.+?)```");
     private final Pattern CODE_1 = Pattern.compile("`(.+?)`");
+    private final Pattern QUOTE = Pattern.compile("^>{1,3} (.*)$");
+    private final Pattern LINK = Pattern.compile("\\[([^\\[]+)\\](\\((www|http:|https:)+[^\\s]+[\\w]\\))");
     // conver this /(?:\r\n|\r|\n)/g to patter in java
     private final Pattern NEW_LINE = Pattern.compile("\\n");
 
@@ -29,12 +32,11 @@ public class Formatter {
         if (bytes < unit)
             return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = "KMGTPE".charAt(exp - 1) + "";
+        String pre = String.valueOf("KMGTPE".charAt(exp - 1));
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
     public String format(String originalText) {
-        System.out.println(originalText);
         Matcher matcher = STRONG.matcher(originalText);
         String newText = originalText;
         while (matcher.find()) {
@@ -60,6 +62,21 @@ public class Formatter {
             newText = newText.replace(group,
                     "<u>" + group.replace("__", "") + "</u>");
         }
+        matcher = QUOTE.matcher(newText);
+        while (matcher.find()) {
+            String group = matcher.group();
+            newText = newText.replace(group,
+                    "<span class=\"quote\">" + group.replaceFirst(">>>", "").replaceFirst(">", "") + "</span>");
+        }
+        matcher = LINK.matcher(newText);
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            String link = matcher.group(2);
+            String raw = "[" + group + "]" + link;
+
+            newText = newText.replace(raw, "<a href=\"" + link.replace("(", "").replace(")", "") + "\">" + group + "</a>");
+        }
+
         matcher = CODE.matcher(newText);
         boolean findCode = false;
         while (matcher.find()) {
@@ -86,7 +103,7 @@ public class Formatter {
 
     public String toHex(Color color) {
         String hex = Integer.toHexString(color.getRGB() & 0xffffff);
-        while(hex.length() < 6){
+        while (hex.length() < 6) {
             hex = "0" + hex;
         }
         return hex;
