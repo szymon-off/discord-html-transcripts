@@ -22,13 +22,15 @@ HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/Discor
 <dependency>
     <groupId>com.github.Ryzeon</groupId>
     <artifactId>discord-html-transcripts</artifactId>
-    <version>
+    <version>Tag</version>
+</dependency>
+```
 
 ## Example Output
 ![output](https://img.derock.dev/5f5q0a.png)
 
 ## Usage
-### Example usage using the built in message fetcher.
+### Example usage using the built-in message fetcher.
 ```java
 DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
 textChannel.sendFiles(transcript.createTranscript(textChannel)).queue()
