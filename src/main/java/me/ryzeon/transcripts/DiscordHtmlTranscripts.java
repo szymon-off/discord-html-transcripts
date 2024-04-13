@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * Created by Ryzeon
- * Edited by Incbom
+ * Contributors: Zemux1613, Inkception, IncbomDev
  * Project: discord-html-transcripts
  * Date: 1/3/2023 @ 10:50
  */
@@ -31,6 +31,10 @@ public class DiscordHtmlTranscripts {
             videoFormats = Arrays.asList("mp4", "webm", "mkv", "avi", "mov", "flv", "wmv", "mpg", "mpeg"),
             audioFormats = Arrays.asList("mp3", "wav", "ogg", "flac");
 
+    /**
+     * Get the instance of the DiscordHtmlTranscripts
+     * @return a singleton instance of the DiscordHtmlTranscripts
+     */
     public static DiscordHtmlTranscripts getInstance() {
         if (instance == null) {
             instance = new DiscordHtmlTranscripts();
@@ -38,9 +42,10 @@ public class DiscordHtmlTranscripts {
         return instance;
     }
 
-    private static void handleFooter(Document document, MessageEmbed embed, Element embedContentContainer) {
+    private void handleFooter(Document document, MessageEmbed embed, Element embedContentContainer) {
         Element embedFooter = document.createElement("div");
         embedFooter.addClass("chatlog__embed-footer");
+
 
         if (embed.getFooter().getIconUrl() != null) {
             Element embedFooterIcon = document.createElement("img");
@@ -64,7 +69,7 @@ public class DiscordHtmlTranscripts {
         embedContentContainer.appendChild(embedFooter);
     }
 
-    private static void handleEmbedImage(Document document, MessageEmbed embed, Element embedContentContainer) {
+    private void handleEmbedImage(Document document, MessageEmbed embed, Element embedContentContainer) {
         Element embedImage = document.createElement("div");
         embedImage.addClass("chatlog__embed-image-container");
 
@@ -84,7 +89,7 @@ public class DiscordHtmlTranscripts {
         embedContentContainer.appendChild(embedImage);
     }
 
-    private static void handleEmbedThumbnail(Document document, MessageEmbed embed, Element embedContent) {
+    private void handleEmbedThumbnail(Document document, MessageEmbed embed, Element embedContent) {
         Element embedThumbnail = document.createElement("div");
         embedThumbnail.addClass("chatlog__embed-thumbnail-container");
 
@@ -104,7 +109,7 @@ public class DiscordHtmlTranscripts {
         embedContent.appendChild(embedThumbnail);
     }
 
-    private static void handleEmbedFields(Document document, MessageEmbed embed, Element embedText) {
+    private void handleEmbedFields(Document document, MessageEmbed embed, Element embedText) {
         Element embedFields = document.createElement("div");
         embedFields.addClass("chatlog__embed-fields");
 
@@ -142,7 +147,7 @@ public class DiscordHtmlTranscripts {
         embedText.appendChild(embedFields);
     }
 
-    private static void handleEmbedDescription(Document document, MessageEmbed embed, Element embedText) {
+    private void handleEmbedDescription(Document document, MessageEmbed embed, Element embedText) {
         Element embedDescription = document.createElement("div");
         embedDescription.addClass("chatlog__embed-description");
 
@@ -155,7 +160,7 @@ public class DiscordHtmlTranscripts {
         embedText.appendChild(embedDescription);
     }
 
-    private static void handleEmbedTitle(Document document, MessageEmbed embed, Element embedText) {
+    private void handleEmbedTitle(Document document, MessageEmbed embed, Element embedText) {
         Element embedTitle = document.createElement("div");
         embedTitle.addClass("chatlog__embed-title");
 
@@ -180,7 +185,7 @@ public class DiscordHtmlTranscripts {
         embedText.appendChild(embedTitle);
     }
 
-    private static void handleEmbedAuthor(Document document, MessageEmbed embed, Element embedText) {
+    private void handleEmbedAuthor(Document document, MessageEmbed embed, Element embedText) {
         Element embedAuthor = document.createElement("div");
         embedAuthor.addClass("chatlog__embed-author");
 
@@ -212,7 +217,7 @@ public class DiscordHtmlTranscripts {
         embedText.appendChild(embedAuthor);
     }
 
-    private static void handleUnknownAttachmentTypes(Document document, Message.Attachment attach, Element attachmentsDiv) {
+    private void handleUnknownAttachmentTypes(Document document, Message.Attachment attach, Element attachmentsDiv) {
         Element attachmentGeneric = document.createElement("div");
         attachmentGeneric.addClass("chatlog__attachment-generic");
 
@@ -244,7 +249,7 @@ public class DiscordHtmlTranscripts {
         attachmentsDiv.appendChild(attachmentGeneric);
     }
 
-    private static void handleAudios(Document document, Message.Attachment attach, Element attachmentsDiv) {
+    private void handleAudios(Document document, Message.Attachment attach, Element attachmentsDiv) {
         Element attachmentAudio = document.createElement("audio");
         attachmentAudio.addClass("chatlog__attachment-media");
         attachmentAudio.attr("src", attach.getUrl());
@@ -256,7 +261,7 @@ public class DiscordHtmlTranscripts {
         attachmentsDiv.appendChild(attachmentAudio);
     }
 
-    private static void handleVideos(Document document, Message.Attachment attach, Element attachmentsDiv) {
+    private void handleVideos(Document document, Message.Attachment attach, Element attachmentsDiv) {
         Element attachmentVideo = document.createElement("video");
         attachmentVideo.addClass("chatlog__attachment-media");
         attachmentVideo.attr("src", attach.getUrl());
@@ -268,7 +273,7 @@ public class DiscordHtmlTranscripts {
         attachmentsDiv.appendChild(attachmentVideo);
     }
 
-    private static void handleImages(Document document, Message.Attachment attach, Element attachmentsDiv) {
+    private void handleImages(Document document, Message.Attachment attach, Element attachmentsDiv) {
         Element attachmentLink = document.createElement("a");
 
         Element attachmentImage = document.createElement("img");
@@ -283,7 +288,7 @@ public class DiscordHtmlTranscripts {
         attachmentsDiv.appendChild(attachmentLink);
     }
 
-    private static void handleMessageReferences(GuildChannel channel, Document document, Message message, Element messageGroup) {
+    private void handleMessageReferences(GuildChannel channel, Document document, Message message, Element messageGroup) {
         // message.reference?.messageId
         // create symbol
         Element referenceSymbol = document.createElement("div");
