@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * Created by Ryzeon, forked by Inkception
+ * Created by Ryzeon
+ * Edited by Incbom
  * Project: discord-html-transcripts
  * Date: 1/3/2023 @ 10:50
  */
@@ -348,7 +349,11 @@ public class DiscordHtmlTranscripts {
         Element chatLog = document.getElementById("chatlog"); // chat log
         for (Message message : messages.stream()
                 .sorted(Comparator.comparing(ISnowflake::getTimeCreated))
-                .collect(Collectors.toList())) {
+                .toList()) {
+
+            if (message.getAuthor().isBot()) {
+                continue;
+            }
             // create message group
             Element messageGroup = document.createElement("div");
             messageGroup.addClass("chatlog__message-group");
@@ -365,9 +370,24 @@ public class DiscordHtmlTranscripts {
 
             Element authorAvatar = document.createElement("img");
             authorAvatar.addClass("chatlog__author-avatar");
-            authorAvatar.attr("src", author.getAvatarUrl());
             authorAvatar.attr("alt", "Avatar");
             authorAvatar.attr("loading", "lazy");
+
+            Element authorName = document.createElement("span");
+            authorName.addClass("chatlog__author-name");
+
+            if (author != null) {
+                authorName.attr("title", Objects.requireNonNull(author.getGlobalName()));
+                authorName.text(author.getName());
+                authorName.attr("data-user-id", author.getId());
+                authorAvatar.attr("src", Objects.requireNonNull(author.getAvatarUrl()));
+            } else {
+                // Handle the case when author is null (e.g., when the message is from a bot)
+                authorName.attr("title", "Bot");
+                authorName.text("Bot");
+                authorName.attr("data-user-id", "Bot");
+                authorAvatar.attr("src", "default_bot_avatar_url"); // replace with your default bot avatar URL
+            }
 
             authorElement.appendChild(authorAvatar);
             messageGroup.appendChild(authorElement);
@@ -375,16 +395,10 @@ public class DiscordHtmlTranscripts {
             // message content
             Element content = document.createElement("div");
             content.addClass("chatlog__messages");
-            // message author name
-            Element authorName = document.createElement("span");
-            authorName.addClass("chatlog__author-name");
-            // authorName.attr("title", author.getName()); // author.name
-            authorName.attr("title", author.getAsTag());
-            authorName.text(author.getName());
-            authorName.attr("data-user-id", author.getId());
+
             content.appendChild(authorName);
 
-            if (author.isBot()) {
+            if (author != null && author.isBot()) {
                 Element botTag = document.createElement("span");
                 botTag.addClass("chatlog__bot-tag").text("BOT");
                 content.appendChild(botTag);
@@ -404,7 +418,7 @@ public class DiscordHtmlTranscripts {
             messageContent.attr("id", "message-" + message.getId());
             messageContent.attr("title", "Message sent: " + message.getTimeCreated().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
-            if (message.getContentDisplay().length() > 0) {
+            if (!message.getContentDisplay().isEmpty()) {
                 Element messageContentContent = document.createElement("div");
                 messageContentContent.addClass("chatlog__content");
 
@@ -517,6 +531,7 @@ public class DiscordHtmlTranscripts {
             }
 
             messageGroup.appendChild(content);
+            assert chatLog != null;
             chatLog.appendChild(messageGroup);
         }
         return new ByteArrayInputStream(document.outerHtml().getBytes(Charsets.UTF_8));

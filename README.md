@@ -1,9 +1,9 @@
 # Discord (JDA) HTML Transcripts
-[![](https://jitpack.io/v/Inkception/discord-html-transcripts.svg)](https://jitpack.io/#Inkception/discord-html-transcripts)
+[![](https://jitpack.io/v/Ryzeon/discord-html-transcripts.svg)](https://jitpack.io/#Ryzeon/discord-html-transcripts)
 
-Discord HTML Transcripts is a node.js module (recode on JDA) to generate nice looking HTML transcripts. Processes discord markdown like **bold**, *italics*, ~~strikethroughs~~, and more. Nicely formats attachments and embeds. Built in XSS protection, preventing users from inserting html tags.
+Discord HTML Transcripts is a node.js module (recode on JDA) to generate nice looking HTML transcripts. Processes discord markdown like **bold**, *italics*, ~~strikethroughs~~, and more. Nicely formats attachments and embeds. Built in XSS protection, preventing users from inserting html tags. 
 
-**This module is designed to work with [JDA 5](https://github.com/DV8FromTheWorld/JDA).**
+**This module is designed to work with [JDA](https://github.com/DV8FromTheWorld/JDA).**
 
 HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/DiscordChatExporter).
 
@@ -20,11 +20,9 @@ HTML Template stolen from [DiscordChatExporter](https://github.com/Tyrrrz/Discor
 
 ```xml
 <dependency>
-    <groupId>com.github.Inkception</groupId>
+    <groupId>com.github.Ryzeon</groupId>
     <artifactId>discord-html-transcripts</artifactId>
-    <version>Tag</version>
-</dependency>
-```
+    <version>
 
 ## Example Output
 ![output](https://img.derock.dev/5f5q0a.png)
@@ -42,6 +40,14 @@ DiscordHtmlTranscripts transcript = DiscordHtmlTranscripts.getInstance();
 transcript.generateFromMessages(messages); // return to InputStream
 ```
 
-
+### You can also put the transcript into a variable
+```java
+DiscordHtmlTranscripts transcripts = new DiscordHtmlTranscripts();
+try {
+	testChannel.sendFiles(transcripts.getTranscript(testChannel, "test.html")).queue();
+} catch (IOException e) {
+	throw new RuntimeException(e);
+}
+```
 
 
