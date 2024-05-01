@@ -46,9 +46,9 @@ transcript.generateFromMessages(messages); // return to InputStream
 ```java
 DiscordHtmlTranscripts transcripts = new DiscordHtmlTranscripts();
 try {
-	testChannel.sendFiles(transcripts.getTranscript(testChannel, "test.html")).queue();
+   testChannel.sendFiles(transcripts.createTranscript(testChannel, "test.html")).queue();
 } catch (IOException e) {
-	throw new RuntimeException(e);
+   throw new RuntimeException(e);
 }
 ```
 
