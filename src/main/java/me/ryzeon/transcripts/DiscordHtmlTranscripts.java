@@ -390,7 +390,7 @@ public class DiscordHtmlTranscripts {
                 authorName.attr("title", Objects.requireNonNull(author.getGlobalName()));
                 authorName.text(author.getName());
                 authorName.attr("data-user-id", author.getId());
-                authorAvatar.attr("src", Objects.requireNonNull(author.getAvatarUrl()));
+                authorAvatar.attr("src", Objects.requireNonNull(author.getEffectiveAvatarUrl()));
             } else {
                 // Handle the case when author is null (e.g., when the message is from a bot)
                 authorName.attr("title", "Bot");
